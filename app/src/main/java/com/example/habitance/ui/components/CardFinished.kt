@@ -1,4 +1,5 @@
-import androidx.compose.foundation.Image
+package com.example.habitance.ui.components
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -20,13 +19,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.tv.material3.Border
 import com.example.habitance.R
 import com.example.habitance.ui.theme.BackGround
 import com.example.habitance.ui.theme.BackGround2
@@ -35,29 +37,22 @@ import com.example.habitance.ui.theme.TextMedium
 import com.example.habitance.ui.theme.fontFamily
 
 @Composable
-fun CardList(
-    activityName: String,
-    target: String,
-    unit: String,
-    startDate: String,
-    endDate: String
-) {
-    val targetInt = target.toIntOrNull() ?: 0
+fun CardFinished() {
     Card(
         colors = CardDefaults.cardColors(BackGround2),
         modifier = Modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(16.dp), // Bentuk sudut card
         elevation = CardDefaults.cardElevation(6.dp)
-    ) {
+    ){
         ConstraintLayout(modifier = Modifier
             .fillMaxWidth()
             .background(TextMedium)
             .padding(16.dp, 3.dp)
         ) {
-            val (judulText, targetText, targetText2, editIcon) = createRefs()
+            val (judulText, editIcon) = createRefs()
             Text(
-                text = activityName,
+                text = "Sugar",
                 fontSize = 13.sp,
                 fontWeight = FontWeight(500),
                 fontFamily = fontFamily,
@@ -65,38 +60,13 @@ fun CardList(
                 modifier = Modifier
                     .constrainAs(judulText){
                         start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
+                        top.linkTo(parent.top, margin = 7.dp)
+                        bottom.linkTo(parent.bottom, margin = 7.dp)
                     }
             )
-            Text(
-                text = "TARGET",
-                letterSpacing = 1.sp,
-                fontSize = 6.sp,
-                fontFamily = fontFamily,
-                color = TextDark,
-                modifier = Modifier
-                    .constrainAs(targetText){
-                        end.linkTo(targetText2.end)
-                        bottom.linkTo(targetText2.top)
-                        top.linkTo(parent.top)
-                    }
-            )
-            Text(
-                text = "$targetInt / $unit",
-                fontSize = 15.sp,
-                fontFamily = fontFamily,
-                color = TextDark,
-                fontWeight = FontWeight(900),
-                modifier = Modifier
-                    .constrainAs(targetText2){
-                        end.linkTo(editIcon.start, margin = 24.dp)
-                        top.linkTo(targetText.bottom)
-                        bottom.linkTo(parent.bottom)
-                    }
-            )
+
             Icon(
-                imageVector = Icons.Default.Edit,
+                painter = painterResource(id=R.drawable.delete),
                 contentDescription = "edit",
                 tint = TextDark,
                 modifier = Modifier
@@ -111,8 +81,8 @@ fun CardList(
         ConstraintLayout(modifier = Modifier
             .background(BackGround)
             .fillMaxWidth()
-        ) {
-            val (targetIcon, targetText, startIcon, startText, endIcon, endText, fireIcon, noteButton, notePreview) = createRefs()
+        ){
+            val (targetIcon, targetText, startIcon, startText, endIcon, endText, percentText, noteButton, notePreview, totalWaktuText, targetTercapaiText) = createRefs()
             Icon(
                 painter = painterResource(id = R.drawable.target),
                 contentDescription = "target icon",
@@ -126,7 +96,7 @@ fun CardList(
                     }
             )
             Text(
-                text = "$target/$unit",
+                text = "0 kali / day",
                 fontSize = 11.sp,
                 fontFamily = fontFamily,
                 color = TextDark,
@@ -149,7 +119,7 @@ fun CardList(
                     }
             )
             Text(
-                text = startDate,
+                text = "03/01/2024",
                 fontSize = 7.sp,
                 fontFamily = fontFamily,
                 color = TextDark,
@@ -172,7 +142,7 @@ fun CardList(
                     }
             )
             Text(
-                text = endDate,
+                text = "03/01/2024",
                 fontSize = 7.sp,
                 fontFamily = fontFamily,
                 color = TextDark,
@@ -183,16 +153,49 @@ fun CardList(
                         bottom.linkTo(endIcon.bottom)
                     }
             )
-            Image(
-                painter = painterResource(id = R.drawable.fire_on),
-                contentDescription = "fire on",
+            Text(
+                text = "66.6 %",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight(900),
+                    color = Color(0xFF16423C)
+                ),
                 modifier = Modifier
-                    .size(30.dp)
-                    .constrainAs(fireIcon){
+                    .constrainAs(percentText){
                         end.linkTo(parent.end, margin = 10.dp)
                         top.linkTo(targetIcon.top)
                     }
             )
+            Text(
+                text = "Total waktu: 60 hari",
+                style = TextStyle(
+                    fontSize = 10.sp,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF16423C),
+                ),
+                modifier = Modifier
+                    .constrainAs(totalWaktuText){
+                        end.linkTo(percentText.end)
+                        top.linkTo(percentText.bottom, margin = 5.dp)
+                    }
+            )
+            Text(
+                text = "Target tercapai: 40 hari",
+                style = TextStyle(
+                    fontSize = 10.sp,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF16423C),
+                ),
+                modifier = Modifier
+                    .constrainAs(targetTercapaiText){
+                        end.linkTo(totalWaktuText.end)
+                        top.linkTo(totalWaktuText.bottom)
+                    }
+            )
+
             Button(
                 onClick = {},
                 modifier = Modifier
@@ -241,13 +244,5 @@ fun CardList(
 @Preview
 @Composable
 fun CardListPreview() {
-    CardList(
-        activityName = "Activity Name",
-        target = "10",
-        unit = "Unit",
-        startDate = "Start Date",
-        endDate = "End Date"
-    )
+    CardFinished()
 }
-
-
